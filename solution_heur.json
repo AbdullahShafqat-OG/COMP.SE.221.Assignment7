@@ -1,0 +1,487 @@
+{
+  "status": "Heuristic-Feasible",
+  "objective": 1728,
+  "horizon_days": 14,
+  "nurses": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N"
+  ],
+  "shifts": [
+    "E",
+    "L"
+  ],
+  "assignments": [
+    {
+      "nurse": "A",
+      "day": 0,
+      "shift": "L"
+    },
+    {
+      "nurse": "A",
+      "day": 1,
+      "shift": "L"
+    },
+    {
+      "nurse": "A",
+      "day": 4,
+      "shift": "E"
+    },
+    {
+      "nurse": "A",
+      "day": 5,
+      "shift": "E"
+    },
+    {
+      "nurse": "A",
+      "day": 6,
+      "shift": "L"
+    },
+    {
+      "nurse": "A",
+      "day": 7,
+      "shift": "L"
+    },
+    {
+      "nurse": "A",
+      "day": 8,
+      "shift": "L"
+    },
+    {
+      "nurse": "B",
+      "day": 2,
+      "shift": "E"
+    },
+    {
+      "nurse": "B",
+      "day": 3,
+      "shift": "E"
+    },
+    {
+      "nurse": "B",
+      "day": 6,
+      "shift": "E"
+    },
+    {
+      "nurse": "B",
+      "day": 7,
+      "shift": "E"
+    },
+    {
+      "nurse": "B",
+      "day": 8,
+      "shift": "E"
+    },
+    {
+      "nurse": "B",
+      "day": 9,
+      "shift": "E"
+    },
+    {
+      "nurse": "B",
+      "day": 10,
+      "shift": "E"
+    },
+    {
+      "nurse": "C",
+      "day": 0,
+      "shift": "L"
+    },
+    {
+      "nurse": "C",
+      "day": 1,
+      "shift": "L"
+    },
+    {
+      "nurse": "C",
+      "day": 4,
+      "shift": "E"
+    },
+    {
+      "nurse": "C",
+      "day": 5,
+      "shift": "E"
+    },
+    {
+      "nurse": "C",
+      "day": 8,
+      "shift": "E"
+    },
+    {
+      "nurse": "C",
+      "day": 9,
+      "shift": "E"
+    },
+    {
+      "nurse": "C",
+      "day": 10,
+      "shift": "E"
+    },
+    {
+      "nurse": "C",
+      "day": 11,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 0,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 1,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 2,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 3,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 6,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 7,
+      "shift": "E"
+    },
+    {
+      "nurse": "D",
+      "day": 8,
+      "shift": "E"
+    },
+    {
+      "nurse": "E",
+      "day": 2,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 3,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 4,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 5,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 6,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 9,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 10,
+      "shift": "L"
+    },
+    {
+      "nurse": "E",
+      "day": 11,
+      "shift": "L"
+    },
+    {
+      "nurse": "F",
+      "day": 2,
+      "shift": "L"
+    },
+    {
+      "nurse": "F",
+      "day": 3,
+      "shift": "L"
+    },
+    {
+      "nurse": "F",
+      "day": 4,
+      "shift": "L"
+    },
+    {
+      "nurse": "F",
+      "day": 5,
+      "shift": "L"
+    },
+    {
+      "nurse": "F",
+      "day": 8,
+      "shift": "E"
+    },
+    {
+      "nurse": "F",
+      "day": 9,
+      "shift": "E"
+    },
+    {
+      "nurse": "F",
+      "day": 10,
+      "shift": "L"
+    },
+    {
+      "nurse": "F",
+      "day": 11,
+      "shift": "L"
+    },
+    {
+      "nurse": "G",
+      "day": 0,
+      "shift": "E"
+    },
+    {
+      "nurse": "G",
+      "day": 1,
+      "shift": "E"
+    },
+    {
+      "nurse": "G",
+      "day": 2,
+      "shift": "L"
+    },
+    {
+      "nurse": "G",
+      "day": 5,
+      "shift": "L"
+    },
+    {
+      "nurse": "G",
+      "day": 6,
+      "shift": "L"
+    },
+    {
+      "nurse": "G",
+      "day": 7,
+      "shift": "L"
+    },
+    {
+      "nurse": "G",
+      "day": 10,
+      "shift": "E"
+    },
+    {
+      "nurse": "G",
+      "day": 11,
+      "shift": "E"
+    },
+    {
+      "nurse": "H",
+      "day": 0,
+      "shift": "E"
+    },
+    {
+      "nurse": "H",
+      "day": 1,
+      "shift": "E"
+    },
+    {
+      "nurse": "H",
+      "day": 2,
+      "shift": "L"
+    },
+    {
+      "nurse": "H",
+      "day": 5,
+      "shift": "E"
+    },
+    {
+      "nurse": "H",
+      "day": 6,
+      "shift": "E"
+    },
+    {
+      "nurse": "H",
+      "day": 7,
+      "shift": "E"
+    },
+    {
+      "nurse": "H",
+      "day": 8,
+      "shift": "L"
+    },
+    {
+      "nurse": "H",
+      "day": 9,
+      "shift": "L"
+    },
+    {
+      "nurse": "I",
+      "day": 1,
+      "shift": "E"
+    },
+    {
+      "nurse": "I",
+      "day": 2,
+      "shift": "L"
+    },
+    {
+      "nurse": "I",
+      "day": 3,
+      "shift": "L"
+    },
+    {
+      "nurse": "I",
+      "day": 6,
+      "shift": "E"
+    },
+    {
+      "nurse": "I",
+      "day": 7,
+      "shift": "E"
+    },
+    {
+      "nurse": "I",
+      "day": 8,
+      "shift": "L"
+    },
+    {
+      "nurse": "I",
+      "day": 9,
+      "shift": "L"
+    },
+    {
+      "nurse": "J",
+      "day": 0,
+      "shift": "L"
+    },
+    {
+      "nurse": "J",
+      "day": 1,
+      "shift": "L"
+    },
+    {
+      "nurse": "J",
+      "day": 2,
+      "shift": "L"
+    },
+    {
+      "nurse": "J",
+      "day": 5,
+      "shift": "L"
+    },
+    {
+      "nurse": "J",
+      "day": 6,
+      "shift": "L"
+    },
+    {
+      "nurse": "J",
+      "day": 9,
+      "shift": "E"
+    },
+    {
+      "nurse": "J",
+      "day": 10,
+      "shift": "E"
+    },
+    {
+      "nurse": "J",
+      "day": 11,
+      "shift": "L"
+    },
+    {
+      "nurse": "K",
+      "day": 0,
+      "shift": "L"
+    },
+    {
+      "nurse": "K",
+      "day": 4,
+      "shift": "L"
+    },
+    {
+      "nurse": "K",
+      "day": 8,
+      "shift": "L"
+    },
+    {
+      "nurse": "K",
+      "day": 9,
+      "shift": "L"
+    },
+    {
+      "nurse": "L",
+      "day": 3,
+      "shift": "L"
+    },
+    {
+      "nurse": "L",
+      "day": 10,
+      "shift": "L"
+    },
+    {
+      "nurse": "L",
+      "day": 12,
+      "shift": "L"
+    },
+    {
+      "nurse": "L",
+      "day": 13,
+      "shift": "L"
+    },
+    {
+      "nurse": "M",
+      "day": 3,
+      "shift": "E"
+    },
+    {
+      "nurse": "M",
+      "day": 4,
+      "shift": "L"
+    },
+    {
+      "nurse": "M",
+      "day": 5,
+      "shift": "L"
+    },
+    {
+      "nurse": "M",
+      "day": 6,
+      "shift": "L"
+    },
+    {
+      "nurse": "N",
+      "day": 0,
+      "shift": "E"
+    },
+    {
+      "nurse": "N",
+      "day": 2,
+      "shift": "E"
+    },
+    {
+      "nurse": "N",
+      "day": 3,
+      "shift": "E"
+    },
+    {
+      "nurse": "N",
+      "day": 4,
+      "shift": "E"
+    }
+  ]
+}
