@@ -9,9 +9,7 @@ Usage:
 
 from __future__ import annotations
 import argparse
-import datetime as _dt
 import json
-import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from xml.dom import minidom
@@ -20,33 +18,21 @@ from problem_reader import parse_instance_from_file, Instance
 from model import build_and_solve
 
 
-def _read_start_date_from_ros(ros_path: Path) -> str | None:
-    """Extract <StartDate>YYYY-MM-DD</StartDate> from a .ros XML file.
+def _resolve_ros_relpath(args, instance_path: Path, xml_out_path: Path) -> str:
+    """Pick the path that goes inside <SchedulingPeriodFile>.
 
-    Returns None if the file or tag cannot be found.
+    Default: a relative path from the XML output directory to the sibling
+    `<instance>.ros` file. CLI override via --ros-xml.
     """
-    try:
-        text = ros_path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError):
-        return None
-    m = re.search(r"<StartDate>\s*(\d{4}-\d{2}-\d{2})\s*</StartDate>", text)
-    return m.group(1) if m else None
-
-
-def _resolve_start_date(args, instance_path: Path) -> str:
-    """Pick a start date from CLI args, sibling .ros file, or fall back."""
-    if args.start_date:
-        return args.start_date
-    ros_candidates = []
     if args.ros_xml:
-        ros_candidates.append(Path(args.ros_xml))
-    ros_candidates.append(instance_path.with_suffix(".ros"))
-    for cand in ros_candidates:
-        if cand.is_file():
-            d = _read_start_date_from_ros(cand)
-            if d:
-                return d
-    return "2014-01-06"  # documented default for Instance2
+        ros_path = Path(args.ros_xml)
+    else:
+        ros_path = instance_path.with_suffix(".ros")
+    try:
+        rel = Path(__import__("os").path.relpath(ros_path, xml_out_path.parent))
+        return rel.as_posix()
+    except ValueError:
+        return ros_path.as_posix()
 
 
 def write_solution_json(result: dict, inst: Instance, path: str) -> None:
@@ -73,61 +59,60 @@ def write_solution_xml(
     result: dict,
     inst: Instance,
     path: str,
-    start_date: str,
-    scheduling_period_id: str,
-    competitor: str,
+    scheduling_period_file: str,
 ) -> None:
-    """Emit a Staff Roster Solutions / NRP-Competition compatible Solution XML.
+    """Emit a RosterViewer-compatible Roster XML (Roster.xsd).
 
     Format (as accepted by https://www.staffrostersolutions.com/rvw/1.4.1/):
 
-        <Solution>
-            <SchedulingPeriodID>...</SchedulingPeriodID>
-            <Competitor>...</Competitor>
-            <SoftConstraintsPenalty>...</SoftConstraintsPenalty>
-            <Assignments>
-                <Assignment>
-                    <Employee>A</Employee>
-                    <Date>2014-01-06</Date>
-                    <ShiftType>E</ShiftType>
-                </Assignment>
-                ...
-            </Assignments>
-        </Solution>
-    """
-    base_date = _dt.date.fromisoformat(start_date)
+        <Roster xmlns:xsi="..." xsi:noNamespaceSchemaLocation="Roster.xsd">
+            <SchedulingPeriodFile>../Instance2.ros</SchedulingPeriodFile>
+            <Penalty>833</Penalty>
 
+            <Employee ID="A">
+                <Assign><Day>0</Day><Shift>E</Shift></Assign>
+                <Assign><Day>1</Day><Shift>E</Shift></Assign>
+                ...
+            </Employee>
+            ...
+        </Roster>
+
+    Day is the 0-based day index from the instance horizon (NOT a calendar
+    date).  Shift is the shift ID from SECTION_SHIFTS.
+    """
     root = ET.Element(
-        "Solution",
+        "Roster",
         attrib={
             "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-            "xsi:noNamespaceSchemaLocation": "Solution.xsd",
+            "xsi:noNamespaceSchemaLocation": "Roster.xsd",
         },
     )
-    ET.SubElement(root, "SchedulingPeriodID").text = scheduling_period_id
-    ET.SubElement(root, "Competitor").text = competitor
+    ET.SubElement(root, "SchedulingPeriodFile").text = scheduling_period_file
+
     obj_val = result.get("objective")
-    ET.SubElement(root, "SoftConstraintsPenalty").text = (
+    ET.SubElement(root, "Penalty").text = (
         str(int(round(obj_val))) if obj_val is not None else "0"
     )
 
-    assignments_el = ET.SubElement(root, "Assignments")
     nurses = list(inst.staff.keys())
     for n in nurses:
-        for d in range(inst.horizon_days):
-            s = result["assignments"].get((n, d))
-            if s is None:
-                continue
-            a = ET.SubElement(assignments_el, "Assignment")
-            ET.SubElement(a, "Employee").text = n
-            ET.SubElement(a, "Date").text = (
-                base_date + _dt.timedelta(days=d)
-            ).isoformat()
-            ET.SubElement(a, "ShiftType").text = s
+        # Skip employees with no assignments rather than emitting an empty block.
+        days_worked = [
+            d for d in range(inst.horizon_days)
+            if result["assignments"].get((n, d)) is not None
+        ]
+        if not days_worked:
+            continue
+        emp_el = ET.SubElement(root, "Employee", attrib={"ID": n})
+        for d in days_worked:
+            s = result["assignments"][(n, d)]
+            assign_el = ET.SubElement(emp_el, "Assign")
+            ET.SubElement(assign_el, "Day").text = str(d)
+            ET.SubElement(assign_el, "Shift").text = s
 
     # Pretty-print
     rough = ET.tostring(root, encoding="utf-8")
-    pretty = minidom.parseString(rough).toprettyxml(indent="  ", encoding="UTF-8")
+    pretty = minidom.parseString(rough).toprettyxml(indent="    ", encoding="UTF-8")
     Path(path).write_bytes(pretty)
 
 
@@ -224,28 +209,13 @@ def main() -> None:
     p.add_argument(
         "--out-xml",
         default="solution.xml",
-        help="RosterViewer-compatible Solution XML output path",
+        help="RosterViewer-compatible Roster XML output path",
     )
     p.add_argument(
         "--ros-xml",
         default=None,
-        help="Path to the .ros XML file (used to read StartDate). "
+        help="Path to the .ros XML file referenced by <SchedulingPeriodFile>. "
         "Defaults to <instance>.ros next to the instance file.",
-    )
-    p.add_argument(
-        "--start-date",
-        default=None,
-        help="Override start date in YYYY-MM-DD (else read from .ros XML).",
-    )
-    p.add_argument(
-        "--scheduling-period-id",
-        default=None,
-        help="SchedulingPeriodID to embed (default: instance file basename).",
-    )
-    p.add_argument(
-        "--competitor",
-        default="PuLP-MIP",
-        help="Competitor / submitter name embedded in the Solution XML.",
     )
     p.add_argument("--quiet", action="store_true", help="Silence solver output")
     args = p.parse_args()
@@ -274,18 +244,16 @@ def main() -> None:
     write_solution_json(result, inst, args.out_json)
     Path(args.out_md).write_text(md, encoding="utf-8")
 
-    start_date = _resolve_start_date(args, instance_path)
-    sp_id = args.scheduling_period_id or instance_path.stem
+    xml_out_path = Path(args.out_xml)
+    sp_file = _resolve_ros_relpath(args, instance_path, xml_out_path)
     write_solution_xml(
         result,
         inst,
         args.out_xml,
-        start_date=start_date,
-        scheduling_period_id=sp_id,
-        competitor=args.competitor,
+        scheduling_period_file=sp_file,
     )
     print(f"Wrote: {args.out_json}, {args.out_md}, {args.out_xml}")
-    print(f"  (XML start date: {start_date}, SchedulingPeriodID: {sp_id})")
+    print(f"  (SchedulingPeriodFile: {sp_file})")
 
 
 if __name__ == "__main__":
