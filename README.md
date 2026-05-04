@@ -156,6 +156,25 @@ shift ID from `SECTION_SHIFTS`. Keep `solution.xml` and `Instance2.ros` in
 the same folder (or pass `--ros-xml ../path/Instance2.ros`) so the
 `<SchedulingPeriodFile>` reference resolves correctly when you upload.
 
+### RosterViewer output
+
+Both `solution.xml` (PuLP/CBC) and `solution_heur.xml` (Greedy + Hill
+Climbing) load straight into the viewer. Side-by-side renderings on
+`Instance2`:
+
+**Exact MIP — PuLP / CBC, objective = 833 (optimal)**
+
+![PuLP solution rendered in RosterViewer](images/pulp_solution.png)
+
+**Heuristic — Greedy + Hill Climbing, objective = 1728 (feasible)**
+
+![Heuristic solution rendered in RosterViewer](images/heuristic_solution.png)
+
+The visual difference reflects the +895 objective gap reported in the
+"Run the heuristic" section: the heuristic's roster is hard-feasible but
+leaves additional under-coverage on the second weekend (days 12–13)
+that the exact MIP avoids.
+
 ## Model summary
 
 **Decision variables** (binary unless noted)
